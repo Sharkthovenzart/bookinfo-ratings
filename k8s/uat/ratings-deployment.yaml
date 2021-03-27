@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookinfo-uat-ratings
+  namespace: student68-bookinfo-uat
+  labels:
+    app: bookinfo-uat-ratings
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookinfo-uat-ratings
+  template:
+    metadata:
+      labels:
+        app: bookinfo-uat-ratings
+    spec:
+      containers:
+      - name: bookinfo-uat-ratings
+        image: ghcr.io/sharkthoven/bookinfo-ratings:dev
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: web-port
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+        env:
+        - name: SERVICE_VERSION
+          value: v2
+        - name: MONGO_DB_URL
+          value: mongodb://bookinfo-uat-ratings-mongodb:27017/ratings
+      imagePullSecrets:
+      - name: registry-bookinfo
