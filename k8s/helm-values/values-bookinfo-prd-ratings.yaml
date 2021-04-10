@@ -1,0 +1,19 @@
+  
+ratings:
+  namespace: student68-bookinfo-prd
+  image: ghcr.io/sharkthoven/bookinfo-ratings
+  tag: prd
+  replicas: 1
+  imagePullSecrets: registry-bookinfo
+  port: 8080
+  healthCheckPath: "/health"
+ingress:
+  host: bookinfo.opsta.net
+  path: "/student34/ratings(/|$)(.*)"
+  serviceType: ClusterIP
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+extraEnv:
+  SERVICE_VERSION: v2
+  MONGO_DB_URL: mongodb://bookinfo-prd-ratings-mongodb:27017/ratings

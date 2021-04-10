@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Values.ratings.namespace }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.ratings.replicas}}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}
+        image: {{ .Values.ratings.image }}:{{ .Values.ratings.tag }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.ratings.port }}
+          name: web-port
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.ratings.healthCheckPath }}
+            port: {{ .Values.ratings.port }}
+            scheme: HTTP
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.ratings.healthCheckPath }}
+            port: {{ .Values.ratings.port }}
+            scheme: HTTP
+          {{- if .Values.extraEnv }}
+        env:
+        {{- range $key, $value := .Values.extraEnv }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+      imagePullSecrets:
+      - name: {{ .Values.ratings.imagePullSecrets }}
