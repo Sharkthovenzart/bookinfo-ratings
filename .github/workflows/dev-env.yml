@@ -19,7 +19,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/sharkthoven/bookinfo-details:dev
+          tags: ghcr.io/sharkthoven/bookinfo-ratings:dev
   deploy:
     needs: build
     runs-on: ubuntu-20.04
