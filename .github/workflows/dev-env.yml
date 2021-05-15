@@ -10,6 +10,5 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - run: docker build -t ghcr.io/sharkthoven/bookinfo-ratings:dev .
-      - run: docker images
+      - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - run: docker push ghcr.io/sharkthoven/bookinfo-ratings:dev
-
