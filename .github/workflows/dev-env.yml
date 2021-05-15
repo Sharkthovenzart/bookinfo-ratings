@@ -12,3 +12,4 @@ jobs:
       - run: docker build -t ghcr.io/sharkthoven/bookinfo-ratings:dev .
       - run: docker images
       - run: docker push ghcr.io/sharkthoven/bookinfo-ratings:dev
+
