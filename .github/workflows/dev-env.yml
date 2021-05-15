@@ -1,0 +1,14 @@
+name: dev-env
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: docker build -t ghcr.io/sharkthoven/bookinfo-ratings:dev .
+      - run: docker images
+      - run: docker push ghcr.io/sharkthoven/bookinfo-ratings:dev
