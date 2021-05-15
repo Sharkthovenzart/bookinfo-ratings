@@ -9,6 +9,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - run: docker build -t ghcr.io/sharkthoven/bookinfo-ratings:dev .
-      - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - run: docker push ghcr.io/sharkthoven/bookinfo-ratings:dev
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ghcr.io/sharkthoven/bookinfo-details:dev
